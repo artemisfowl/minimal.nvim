@@ -61,3 +61,19 @@ opt.completeopt = "fuzzy,menu,menuone,noinsert,popup"
 
 -- hover update time
 opt.updatetime = 350
+
+-- Show the list characters
+vim.opt.list = true
+vim.opt.listchars = {
+  tab = "» ",
+  trail = "·",
+  nbsp = "‿",
+  eol = "↵",
+  extends = "…",
+  precedes = "…",
+  multispace = "￮",
+  lead = " ",
+  space = "␣",
+}
+
+vim.o.winborder = "rounded"

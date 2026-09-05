@@ -27,10 +27,10 @@ vim.api.nvim_create_autocmd('ColorScheme', {
 
     -- 1. Active cursor row background tint
     vim.api.nvim_set_hl(0, 'CursorLine', { bold = true, bg = '#2A2A2A', force = true })
-    
+
     -- 2. Bright active line number (Pure White)
     vim.api.nvim_set_hl(0, 'CursorLineNr', { fg = '#FFFFFF', bold = true, force = true })
-    
+
     -- 3. CRITICAL OVERRIDE: High-contrast silver gray relative numbers
     vim.api.nvim_set_hl(0, 'LineNr', { fg = '#C0C0C0', bold = true, force = true })
   end,
@@ -84,7 +84,7 @@ local lang_settings = {
 -- Dynamically loop and establish clean, native auto-commands
 for lang, config in pairs(lang_settings) do
   local group = vim.api.nvim_create_augroup('lang_' .. lang, { clear = true })
-  
+
   -- Step A: Set filetype explicitly on read/new
   vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
     group = group,
@@ -175,24 +175,24 @@ vim.diagnostic.config({
     -- Clean separator between your code and the diagnostic text
     spacing = 4,
     prefix = "■",
-    
+
     -- Custom format function to truncate long error messages
     format = function(diagnostic)
       local max_length = 50 -- Maximum character width before cutting off
       local message = diagnostic.message
-      
+
       -- Clean up message formatting (replace newlines with spaces)
       message = message:gsub("\n", " ")
-      
+
       if #message > max_length then
         -- Cut the string down and append a clean ellipsis symbol
         return string.sub(message, 1, max_length) .. "..."
       end
-      
+
       return message
     end,
   },
-  
+
   -- Keep these standard diagnostic layouts running smoothly alongside virtual text
   signs = true,
   underline = true,
@@ -217,6 +217,22 @@ vim.api.nvim_create_autocmd("BufEnter", {
         vim.b.minicompletion_disable = true
       end
     end, 50) -- 50ms delay gives LSP time to handshake
+  end,
+})
+
+-- Trim the newline/trailing space on save
+local autoclean = vim.api.nvim_create_augroup("RemoteTrailingSpace", { clear = true })
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+  group = autoclean,
+  pattern = "*",
+  callback = function()
+    -- Save the current cursor position
+    local save_cursor = vim.fn.getpos(".")
+    -- Remove trailing spaces globally without throwing errors if none are found
+    vim.cmd([[%s/\s\+$//e]])
+    -- Restore the cursor position so it doesn't jump
+    vim.fn.setpos(".", save_cursor)
   end,
 })
 

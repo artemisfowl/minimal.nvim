@@ -69,3 +69,6 @@ vim.api.nvim_create_user_command("PackStatus", function ()
 	print(vim.inspect(vim.pack.get()))
 end, {})
 
+
+-- Toggle list characters
+vim.keymap.set('n', '<leader>tl', ':set list!<CR>', { desc = 'Toggle invisible characters' })
