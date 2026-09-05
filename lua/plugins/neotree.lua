@@ -18,6 +18,10 @@ neotree.setup({
   filesystem = {
     -- THIS IS THE TRICK: Maps creation/renaming tasks directly to centered window overlays
     use_popups_for_input = true, 
+    follow_current_file = {
+      enabled = true,
+      leave_dirs_open = true,
+    },
   }
 })
 
