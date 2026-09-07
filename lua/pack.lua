@@ -1,7 +1,7 @@
 -- Helper function to expand GitHub shorthands properly
 local function clean_specs(specs)
   local processed = {}
-  
+
   for _, spec in ipairs(specs) do
     if type(spec) == "string" then
       -- Plain string expansion
@@ -10,16 +10,16 @@ local function clean_specs(specs)
         url = "https://github.com/" .. url
       end
       table.insert(processed, { src = url })
-      
+
     elseif type(spec) == "table" then
       -- Table spec parsing (e.g. { "nvim-telescope/telescope.nvim" })
       local target = spec.src or spec[1]
-      
+
       if target and type(target) == "string" then
         if not target:match("^https?://") then
           target = "https://github.com/" .. target
         end
-        
+
         -- Explicitly bind to the native 'src' key and clear array index [1]
         spec.src = target
         spec[1] = nil
@@ -27,7 +27,7 @@ local function clean_specs(specs)
       table.insert(processed, spec)
     end
   end
-  
+
   return processed
 end
 
@@ -39,19 +39,19 @@ end
 -- Declare your plugins using a table structure inside vim.pack.add
 pack_add({
   -- Treesitter for advanced syntax highlighting
-  { 
-    "nvim-treesitter/nvim-treesitter", 
-    hooks = { 
-      post_checkout = function() vim.cmd("TSUpdate") end 
-    } 
+  {
+    "nvim-treesitter/nvim-treesitter",
+    hooks = {
+      post_checkout = function() vim.cmd("TSUpdate") end
+    }
   },
   -- Dependencies for neo-tree UI
   "nvim-lua/plenary.nvim",
   "nvim-tree/nvim-web-devicons",
   "MunifTanjim/nui.nvim",
-  
+
   -- The core file tree explorer module
-  { 
+  {
     "nvim-neo-tree/neo-tree.nvim",
     branch = "v3.x"
   },
@@ -66,11 +66,23 @@ pack_add({
   -- Add this for lightning-fast auto popup behaviors
   "echasnovski/mini.completion",
 
+	-- For adding the outline
+	"stevearc/aerial.nvim",
+
   -- lspconfig handler for nvim
   "neovim/nvim-lspconfig",
 
   -- The minimalist monochrome dark theme
   "cranberry-clockworks/coal.nvim",
+
+  -- For showing breadcrumbs
+  "Bekaboo/dropbar.nvim",
+
+  -- For the unicode glyphs
+  "nvim-telescope/telescope-symbols.nvim",
+
+  -- For preview
+  "dnlhc/glance.nvim"
 })
 
 -- Load individual plugin configurations from the plugins folder
@@ -79,3 +91,6 @@ require("plugins.telescope")
 require("plugins.coal")
 require("plugins.mason")
 require("plugins.mini")
+require("plugins.aerial")
+require("plugins.dropbar")
+require("plugins.glance")
