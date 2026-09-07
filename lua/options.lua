@@ -9,8 +9,8 @@ opt.splitright = true 			-- split vertical windows to the right
 opt.splitbelow = true 			-- split horizontal windows to the bottom
 
 -- searching
-opt.ignorecase = true 			-- case in-sensitive searching 
-opt.smartcase = true 			-- if upper-case alphabet used in searching, become case sensitive 
+opt.ignorecase = true 			-- case in-sensitive searching
+opt.smartcase = true 			-- if upper-case alphabet used in searching, become case sensitive
 opt.hlsearch = true			-- hilight the search
 opt.incsearch = true			-- enable the incremental search
 opt.autochdir = false			-- automatically change the directory to the directory of the file being edited
@@ -77,3 +77,42 @@ vim.opt.listchars = {
 }
 
 vim.o.winborder = "rounded"
+
+-- 1. Helper to fetch the current Git branch asynchronously
+local function get_git_branch()
+  if vim.b.git_branch then
+    return vim.b.git_branch
+  end
+
+  local dir = vim.fn.expand('%:p:h')
+  if dir == "" then return "" end
+
+  vim.system({ 'git', 'branch', '--show-current' }, { cwd = dir }, function(obj)
+    if obj.code == 0 and obj.stdout then
+      local branch = string.gsub(obj.stdout, "%s+", "")
+      if branch ~= "" then
+        vim.schedule(function()
+          -- Add a branch icon (requires a Nerd Font installed in your terminal)
+          vim.b.git_branch = "  " .. branch .. " "
+        end)
+      end
+    end
+  end)
+
+  return vim.b.git_branch or ""
+end
+
+-- 2. Build the statusline layout
+function RenderStatusLine()
+  local file_name = " %f %m"
+  local git_branch = get_git_branch()
+  local align = "%="
+  local file_type = " %y "
+  local line_col = " %l:%c "
+
+  return file_name .. git_branch .. align .. file_type .. line_col
+end
+
+-- 3. Apply it to Neovim
+vim.opt.statusline = "%!v:lua.RenderStatusLine()"
+
