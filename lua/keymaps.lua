@@ -44,19 +44,19 @@ keymap.set("n", "<", "<<", { desc = "De-indent current line" })
 keymap.set("v", ">", ">gv", { desc = "Indent selected block and keep selection" })
 keymap.set("v", "<", "<gv", { desc = "De-indent selected block and keep selection" })
 
--- Settings for updating the plugins and required configurations  
+-- Settings for updating the plugins and required configurations
 vim.api.nvim_create_user_command("PackUpdate", function ()
 	vim.pack.update()
 	local plugins = vim.pack.get()
   	local names = {}
-  
+
   	-- Extract names from the registered specs
   	for _, p in ipairs(plugins) do
     		if p.spec and p.spec.name then
       			table.insert(names, p.spec.name)
     		end
   	end
-  
+
   	if #names > 0 then
     		-- Explicitly pass names to force vim.pack to pull/clone them
     		vim.pack.update(names)
@@ -72,3 +72,13 @@ end, {})
 
 -- Toggle list characters
 vim.keymap.set('n', '<leader>tl', ':set list!<CR>', { desc = 'Toggle invisible characters' })
+
+-- Toggle the VS Code style code outline panel using <leader>o
+vim.keymap.set("n", "<leader>o", "<cmd>AerialToggle!<CR>", { desc = "Toggle Code [O]utline panel" })
+
+-- Keymaps to peek functions, methods, and classes inline using Glance
+vim.keymap.set('n', 'gpd', '<cmd>Glance definitions<CR>', { desc = '[G]lance [D]efinitions' })
+vim.keymap.set('n', 'gr', '<cmd>Glance references<CR>', { desc = '[G]lance [R]eferences' })
+vim.keymap.set('n', 'gi', '<cmd>Glance implementations<CR>', { desc = '[G]lance [I]mplementations' })
+vim.keymap.set('n', 'gy', '<cmd>Glance type_definitions<CR>', { desc = '[G]lance T[y]pe Definitions' })
+
