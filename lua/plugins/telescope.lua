@@ -18,8 +18,22 @@ telescope.setup({
     },
     -- Clear standard layout borders to look modern
     border = true,
+    extensions = {
+            symbols = {
+                    -- Tell telescope to source all Unicode ranges, math symbols, and Nerd Fonts
+                    sources = { 'emoji', 'nerd', 'math', 'gucharmap', 'gitmojis' }
+            }
+    },
   },
 })
+
+-- SAFE LOADING: Only load the extension if the package module actually exists on disk
+status_ok, _ = pcall(telescope.load_extension, 'symbols')
+-- if status_ok then
+--   telescope.load_extension('symbols')
+-- else
+--   vim.notify("telescope-symbols plugin is missing! Run your package sync command.", vim.log.levels.WARN)
+-- end
 
 -- 2. Global Picker Keymaps
 -- Fast project searching and workspace navigation
@@ -42,3 +56,6 @@ vim.keymap.set("n", "<leader>fs", builtin.treesitter, { desc = "Telescope Tree-s
 -- Show Diagnostics (Space + s + d)
 -- This pulls all active LSP errors, warnings, and hints into a filterable list
 vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "Search Diagnostics list via Telescope" })
+
+-- Search ALL system glyphs, emojis, and nerd fonts under <Space>si
+vim.keymap.set('n', '<leader>si', '<cmd>Telescope symbols<CR>', { desc = '[S]earch Universal [I]cons & Glyphs' })
