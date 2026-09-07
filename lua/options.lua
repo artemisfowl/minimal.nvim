@@ -63,7 +63,7 @@ opt.completeopt = "fuzzy,menu,menuone,noinsert,popup"
 opt.updatetime = 350
 
 -- Show the list characters
-vim.opt.list = true
+vim.opt.list = false
 vim.opt.listchars = {
   tab = "» ",
   trail = "·",
