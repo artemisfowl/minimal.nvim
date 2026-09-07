@@ -54,7 +54,7 @@ local function set_buffer_options(opts)
   vim.opt_local.colorcolumn = tostring(opts.cc)
   vim.opt_local.tabstop = opts.ts
   vim.opt_local.shiftwidth = opts.ts
-  vim.opt_local.expandtab = true
+  vim.opt_local.expandtab = opts.et
   vim.opt_local.cursorcolumn = false
   vim.opt_local.cursorline = true
   vim.opt_local.textwidth = opts.tw
@@ -66,19 +66,20 @@ vim.api.nvim_create_autocmd('FileType', {
   group = any_group,
   pattern = '*',
   callback = function()
-    set_buffer_options({ cc = 200, ts = 2, tw = 199 })
+    set_buffer_options({ cc = 200, ts = 2, tw = 199, et = false })
   end,
 })
 
 -- Languages Settings Matrix
 local lang_settings = {
-  c      = { pattern = { '*.c', '*.h' },     cc = 80,  ts = 8, tw = 79 },
-  cpp    = { pattern = { '*.cpp', '*.hpp' }, cc = 120, ts = 2, tw = 119 },
-  python = { pattern = '*.py',                cc = 120, ts = 4, tw = 119 },
-  go     = { pattern = '*.go',                cc = 80,  ts = 4, tw = 79 },
-  ruby   = { pattern = '*.rb',                cc = 80,  ts = 8, tw = 79 },
-  tex    = { pattern = '*.tex',               cc = 120, ts = 4, tw = 119 },
-  lisp   = { pattern = '*.lisp',              cc = 120, ts = 8, tw = 119 },
+  c      = { pattern = { '*.c', '*.h' },     cc = 80,  ts = 8, tw = 79, et = true },
+  lua      = { pattern = { '*.lua' },     cc = 80,  ts = 8, tw = 79, et = true },
+  cpp    = { pattern = { '*.cpp', '*.hpp' }, cc = 120, ts = 2, tw = 119, et = true },
+  python = { pattern = '*.py',                cc = 120, ts = 4, tw = 119, et = true },
+  go     = { pattern = '*.go',                cc = 80,  ts = 4, tw = 79, et = true },
+  ruby   = { pattern = '*.rb',                cc = 80,  ts = 8, tw = 79, et = true },
+  tex    = { pattern = '*.tex',               cc = 120, ts = 4, tw = 119, et = true },
+  lisp   = { pattern = '*.lisp',              cc = 120, ts = 8, tw = 119, et = true },
 }
 
 -- Dynamically loop and establish clean, native auto-commands
