@@ -82,7 +82,7 @@ pack_add({
   "nvim-telescope/telescope-symbols.nvim",
 
   -- For preview
-  "dnlhc/glance.nvim"
+  "dnlhc/glance.nvim",
 })
 
 -- Load individual plugin configurations from the plugins folder

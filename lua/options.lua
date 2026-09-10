@@ -78,41 +78,75 @@ vim.opt.listchars = {
 
 vim.o.winborder = "rounded"
 
--- 1. Helper to fetch the current Git branch asynchronously
-local function get_git_branch()
-  if vim.b.git_branch then
-    return vim.b.git_branch
-  end
+-- ==========================================================================
+-- 1. Optimized Async Git Branch Tracker
+-- ==========================================================================
+local function update_git_branch(bufnr)
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
 
-  local dir = vim.fn.expand('%:p:h')
-  if dir == "" then return "" end
+  -- Skip invalid or special buffers (like Neo-tree, Telescope, etc.)
+  if vim.bo[bufnr].buftype ~= "" then return end
+
+  local file_path = vim.api.nvim_buf_get_name(bufnr)
+  local dir = vim.fn.fnamemodify(file_path, ':p:h')
+  if dir == "" or not vim.fn.isdirectory(dir) then return end
 
   vim.system({ 'git', 'branch', '--show-current' }, { cwd = dir }, function(obj)
     if obj.code == 0 and obj.stdout then
       local branch = string.gsub(obj.stdout, "%s+", "")
-      if branch ~= "" then
-        vim.schedule(function()
-          -- Add a branch icon (requires a Nerd Font installed in your terminal)
-          vim.b.git_branch = "  " .. branch .. " "
-        end)
-      end
+      vim.schedule(function()
+        if vim.api.nvim_buf_is_valid(bufnr) then
+          if branch ~= "" then
+            vim.b[bufnr].git_branch = "  " .. branch .. " "
+          else
+            vim.b[bufnr].git_branch = "" -- Not a git repo
+          end
+          -- Force a statusline redraw now that the value is updated
+          vim.cmd('redrawstatus')
+        end
+      end)
+    else
+      vim.schedule(function()
+        if vim.api.nvim_buf_is_valid(bufnr) then
+          vim.b[bufnr].git_branch = ""
+          vim.cmd('redrawstatus')
+        end
+      end)
     end
   end)
-
-  return vim.b.git_branch or ""
 end
 
--- 2. Build the statusline layout
+-- ==========================================================================
+-- 2. Event Triggers: Catch External Changes (Tmux, Terminal Focus)
+-- ==========================================================================
+local timer = vim.uv.new_timer()
+local git_group = vim.api.nvim_create_augroup('StatuslineGitTracker', { clear = true })
+
+vim.api.nvim_create_autocmd({ 'BufEnter', 'FocusGained', 'BufWritePost' }, {
+  group = git_group,
+  callback = function(args)
+    -- Debounce slightly to prevent thrashing if switching buffers rapidly
+    timer:stop()
+    timer:start(50, 0, function()
+      vim.schedule(function()
+        update_git_branch(args.buf)
+      end)
+    end)
+  end,
+})
+
+-- ==========================================================================
+-- 3. Render and Apply (Synchronous & Blazing Fast)
+-- ==========================================================================
 function RenderStatusLine()
-  local file_name = " %f %m"
-  local git_branch = get_git_branch()
-  local align = "%="
-  local file_type = " %y "
-  local line_col = " %l:%c "
+  local file_name  = " %f %m"
+  local git_branch = vim.b.git_branch or "" -- Just reads the cached variable instantly
+  local align      = "%="
+  local file_type  = " %y "
+  local line_col   = " %l:%c "
 
   return file_name .. git_branch .. align .. file_type .. line_col
 end
 
--- 3. Apply it to Neovim
 vim.opt.statusline = "%!v:lua.RenderStatusLine()"
 
