@@ -83,6 +83,10 @@ pack_add({
 
   -- For preview
   "dnlhc/glance.nvim",
+
+  -- For folding
+  "kevinhwang91/nvim-ufo",
+  "kevinhwang91/promise-async",
 })
 
 -- Load individual plugin configurations from the plugins folder
@@ -94,3 +98,4 @@ require("plugins.mini")
 require("plugins.aerial")
 require("plugins.dropbar")
 require("plugins.glance")
+require("plugins.ufo")

@@ -150,3 +150,10 @@ end
 
 vim.opt.statusline = "%!v:lua.RenderStatusLine()"
 
+
+-- Folding related options
+vim.opt.foldcolumn = '0' -- Shows a small fold indicator column on the left
+vim.opt.foldlevel = 99   -- Using ufo provider requires high fold level
+vim.opt.foldlevelstart = 99
+vim.opt.foldenable = true
+
