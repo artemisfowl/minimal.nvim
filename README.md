@@ -66,7 +66,8 @@ Once the version is confirmed, please use the following commands in order to get
  ```
  - Clean the local share using the command:
  ```bash
- rm -rf ~/.local/share/nvim```
+ rm -rf ~/.local/share/nvim
+ ```
  or rename it using command:
  ```bash
  mv ~/.local/share/nvim ~/.local/share/nvim-bkup
