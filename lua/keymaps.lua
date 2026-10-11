@@ -82,3 +82,5 @@ vim.keymap.set('n', 'gr', '<cmd>Glance references<CR>', { desc = '[G]lance [R]ef
 vim.keymap.set('n', 'gi', '<cmd>Glance implementations<CR>', { desc = '[G]lance [I]mplementations' })
 vim.keymap.set('n', 'gy', '<cmd>Glance type_definitions<CR>', { desc = '[G]lance T[y]pe Definitions' })
 
+-- Keymap for showing the documentation
+vim.keymap.set('n', '<leader>k', vim.lsp.buf.hover, { desc = 'LSP hover documentation' })
