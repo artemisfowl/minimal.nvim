@@ -74,7 +74,8 @@ end, {})
 vim.keymap.set('n', '<leader>tl', ':set list!<CR>', { desc = 'Toggle invisible characters' })
 
 -- Toggle the VS Code style code outline panel using <leader>o
-vim.keymap.set("n", "<leader>o", "<cmd>AerialToggle!<CR>", { desc = "Toggle Code [O]utline panel" })
+vim.keymap.set("n", "<leader>o", "<cmd>AerialToggle<CR>", { desc = "Toggle Code [O]utline panel" })
+vim.keymap.set("n", "<leader>O", "<cmd>AerialToggle!<CR>", { desc = "Toggle Code [O]utline panel" })
 
 -- Keymaps to peek functions, methods, and classes inline using Glance
 vim.keymap.set('n', 'gpd', '<cmd>Glance definitions<CR>', { desc = '[G]lance [D]efinitions' })
