@@ -73,7 +73,7 @@ vim.api.nvim_create_autocmd('FileType', {
 -- Languages Settings Matrix
 local lang_settings = {
   c      = { pattern = { '*.c', '*.h' },     cc = 80,  ts = 8, tw = 79, et = true },
-  lua      = { pattern = { '*.lua' },     cc = 80,  ts = 8, tw = 79, et = true },
+  lua      = { pattern = { '*.lua' },     cc = 120,  ts = 2, tw = 119, et = true },
   cpp    = { pattern = { '*.cpp', '*.hpp' }, cc = 120, ts = 2, tw = 119, et = true },
   python = { pattern = '*.py',                cc = 120, ts = 4, tw = 119, et = true },
   go     = { pattern = '*.go',                cc = 80,  ts = 4, tw = 79, et = true },
