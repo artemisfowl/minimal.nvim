@@ -73,6 +73,10 @@ end, {})
 -- Toggle list characters
 vim.keymap.set('n', '<leader>tl', ':set list!<CR>', { desc = 'Toggle invisible characters' })
 
+-- Remapping j and k to gj and gk
+vim.keymap.set('n', 'j', 'gj', { desc = 'Move down even inside wraps' })
+vim.keymap.set('n', 'k', 'gk', { desc = 'Move up even inside wraps' })
+
 -- Toggle the VS Code style code outline panel using <leader>o
 vim.keymap.set("n", "<leader>o", "<cmd>AerialToggle<CR>", { desc = "Toggle Code [O]utline panel" })
 vim.keymap.set("n", "<leader>O", "<cmd>AerialToggle!<CR>", { desc = "Toggle Code [O]utline panel" })
